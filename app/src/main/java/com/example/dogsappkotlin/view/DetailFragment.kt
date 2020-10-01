@@ -10,6 +10,7 @@ import com.example.dogsappkotlin.R
 
 class DetailFragment : Fragment() {
 
+    private var dogUuid = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -21,6 +22,10 @@ class DetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        arguments?.let {
+            dogUuid = DetailFragmentArgs.fromBundle(it).dogUuid
+        }
 
 //        val action = DetailFragmentDirections.actionListFragment()
 //        Navigation.findNavController(id).navigate(action)
