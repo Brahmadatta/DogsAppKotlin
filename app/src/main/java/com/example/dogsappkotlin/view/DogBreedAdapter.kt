@@ -3,6 +3,7 @@ package com.example.dogsappkotlin.view
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.example.dogsappkotlin.R
 import com.example.dogsappkotlin.model.DogBreed
@@ -29,6 +30,9 @@ class DogBreedAdapter(val dogList : ArrayList<DogBreed>): RecyclerView.Adapter<D
 
         holder.itemView.name.text = dogList[position].dogBreed
         holder.itemView.lifeSpan.text = dogList[position].lifeSpan
+        holder.itemView.setOnClickListener {
+            Navigation.findNavController(it).navigate(ListFragmentDirections.actionDetailFragment())
+        }
     }
 
     override fun getItemCount() = dogList.size
