@@ -34,44 +34,74 @@ class ListFragment : Fragment() {
 //        Navigation.findNavController(id).navigate(action)
 
         viewModel = ViewModelProviders.of(this).get(DogViewModel::class.java)
+        observeViewModel()
+
         viewModel.refresh()
 
         dogsList.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = dogBreedAdapter
+            dogsList.adapter = dogBreedAdapter
         }
 
-        observeViewModel()
+        refreshLayout.setOnRefreshListener {
+            dogsList.visibility = View.GONE
+            loadingView.visibility = View.VISIBLE
+            listError.visibility = View.GONE
+            viewModel.refresh()
+            refreshLayout.isRefreshing = false
+        }
+
     }
 
-    private fun observeViewModel() {
+//    fun observeViewModel() {
+//
+//        viewModel.dogs.observe(viewLifecycleOwner, Observer {dogs ->
+//            dogs?.let {
+//                dogsList.visibility = View.VISIBLE
+//                dogBreedAdapter.updateDogsList(dogs)
+//            }
+//        })
+//
+//        viewModel.dogLoadError.observe(viewLifecycleOwner, Observer {isError ->
+//            isError?.let {
+//                listError.visibility = if(it) View.VISIBLE else View.GONE
+//            }
+//        })
+//
+//        viewModel.loading.observe(viewLifecycleOwner, Observer { isLoading ->
+//            isLoading?.let {
+//                loadingView.visibility = if(it) View.VISIBLE else View.GONE
+//                if(it) {
+//                    listError.visibility = View.GONE
+//                    dogsList.visibility = View.GONE
+//                }
+//            }
+//        })
+//    }
 
-        viewModel.dogs.observe(viewLifecycleOwner, Observer {dogs ->
+    fun observeViewModel()
+    {
+        viewModel.dogs.observe(viewLifecycleOwner, Observer { dogs ->
             dogs?.let {
-
                 dogsList.visibility = View.VISIBLE
                 dogBreedAdapter.updateDogsList(dogs)
-                listError.visibility = View.GONE
-                loadingView.visibility = View.GONE
             }
         })
 
         viewModel.dogLoadError.observe(viewLifecycleOwner, Observer { isError ->
             isError?.let {
                 listError.visibility = if (it) View.VISIBLE else View.GONE
-                dogsList.visibility = View.GONE
-                loadingView.visibility = View.GONE
             }
         })
 
         viewModel.loading.observe(viewLifecycleOwner, Observer { isLoading ->
             isLoading?.let {
                 loadingView.visibility = if (it) View.VISIBLE else View.GONE
-
                 if (it)
                 {
-                    dogsList.visibility = View.GONE
                     listError.visibility = View.GONE
+                    dogsList.visibility = View.GONE
                 }
             }
         })

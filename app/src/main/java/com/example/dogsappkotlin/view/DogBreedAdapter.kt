@@ -9,7 +9,7 @@ import com.example.dogsappkotlin.R
 import com.example.dogsappkotlin.model.DogBreed
 import kotlinx.android.synthetic.main.item_dog.view.*
 
-class DogBreedAdapter(val dogList : ArrayList<DogBreed>): RecyclerView.Adapter<DogBreedAdapter.DogBreedViewHolder>(){
+class DogBreedAdapter(private val dogList : ArrayList<DogBreed>): RecyclerView.Adapter<DogBreedAdapter.DogBreedViewHolder>(){
 
 
     fun updateDogsList(newlist : ArrayList<DogBreed>)
@@ -21,8 +21,8 @@ class DogBreedAdapter(val dogList : ArrayList<DogBreed>): RecyclerView.Adapter<D
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DogBreedViewHolder {
-
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_dog,parent,false)
+        var inflater = LayoutInflater.from(parent.context)
+        val view = inflater.inflate(R.layout.item_dog,parent,false)
         return DogBreedViewHolder(view)
     }
 
