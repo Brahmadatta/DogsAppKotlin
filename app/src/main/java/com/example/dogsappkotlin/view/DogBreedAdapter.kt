@@ -7,6 +7,8 @@ import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.example.dogsappkotlin.R
 import com.example.dogsappkotlin.model.DogBreed
+import com.example.dogsappkotlin.util.getProgressDrawable
+import com.example.dogsappkotlin.util.loadImage
 import kotlinx.android.synthetic.main.item_dog.view.*
 
 class DogBreedAdapter(private val dogList : ArrayList<DogBreed>): RecyclerView.Adapter<DogBreedAdapter.DogBreedViewHolder>(){
@@ -33,6 +35,7 @@ class DogBreedAdapter(private val dogList : ArrayList<DogBreed>): RecyclerView.A
         holder.itemView.setOnClickListener {
             Navigation.findNavController(it).navigate(ListFragmentDirections.actionDetailFragment())
         }
+        holder.itemView.imageView.loadImage(dogList[position].imageUrl, getProgressDrawable(holder.itemView.context))
     }
 
     override fun getItemCount() = dogList.size
