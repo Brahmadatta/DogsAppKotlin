@@ -1,6 +1,7 @@
 package com.example.dogsappkotlin.viewmodel
 
 import android.app.Application
+import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.dogsappkotlin.model.DogBreed
@@ -15,6 +16,7 @@ import kotlinx.coroutines.launch
 
 class DogViewModel(application: Application) : BaseViewModel(application) {
 
+    private var refreshTime = 5 * 60 * 1000 * 1000 * 1000L
     private var prefHelper = SharedPreferenceHelper(getApplication())
 
     private val dogsApiService = DogsApiService()
@@ -27,11 +29,33 @@ class DogViewModel(application: Application) : BaseViewModel(application) {
 
     fun refresh(){
 
-        fetchRemote()
+        val updateTime = prefHelper.getUpdateTime()
+        if (updateTime != null && updateTime != 0L && System.nanoTime() - updateTime < refreshTime)
+        {
+            fetchFromDatabase()
+        }else {
+            fetchFromRemote()
+        }
     }
 
 
-    private fun fetchRemote()
+    fun refreshByPassCache()
+    {
+        fetchFromRemote()
+    }
+
+
+    private fun fetchFromDatabase()
+    {
+        loading.value = true
+        launch {
+            val dogs = DogDatabase(getApplication()).dogDao().getAllDogs()
+            dogsRetrieved(dogs as ArrayList<DogBreed>)
+            Toast.makeText(getApplication(),"Dogs Retrieved from Database",Toast.LENGTH_LONG).show()
+        }
+    }
+
+    private fun fetchFromRemote()
     {
         compositeDisposable.add(dogsApiService.getDogs().subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
@@ -39,6 +63,7 @@ class DogViewModel(application: Application) : BaseViewModel(application) {
                 override fun onSuccess(list : ArrayList<DogBreed>) {
 
                     storeDogsLocally(list)
+                    Toast.makeText(getApplication(),"Dogs Retrieved from endpoint",Toast.LENGTH_LONG).show()
 
 
                 }
