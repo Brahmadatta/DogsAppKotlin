@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.example.dogsappkotlin.model.DogBreed
 import com.example.dogsappkotlin.model.DogDatabase
 import com.example.dogsappkotlin.model.DogsApiService
+import com.example.dogsappkotlin.util.SharedPreferenceHelper
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableSingleObserver
@@ -13,6 +14,8 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.launch
 
 class DogViewModel(application: Application) : BaseViewModel(application) {
+
+    private var prefHelper = SharedPreferenceHelper(getApplication())
 
     private val dogsApiService = DogsApiService()
 
@@ -74,6 +77,7 @@ class DogViewModel(application: Application) : BaseViewModel(application) {
             }
             dogsRetrieved(dogsList)
         }
+        prefHelper.saveUpdateTime(System.nanoTime())
     }
 
     override fun onCleared() {
