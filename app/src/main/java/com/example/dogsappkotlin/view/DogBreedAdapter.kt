@@ -1,17 +1,12 @@
 package com.example.dogsappkotlin.view
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.example.dogsappkotlin.R
 import com.example.dogsappkotlin.databinding.ItemDogBinding
 import com.example.dogsappkotlin.model.DogBreed
-import com.example.dogsappkotlin.util.getProgressDrawable
-import com.example.dogsappkotlin.util.loadImage
-import kotlinx.android.synthetic.main.item_dog.view.*
 
 class DogBreedAdapter(private val dogList : ArrayList<DogBreed>): RecyclerView.Adapter<DogBreedAdapter.DogBreedViewHolder>(){
 

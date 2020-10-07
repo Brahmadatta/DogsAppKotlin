@@ -3,6 +3,8 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'androidx.navigation.safeargs'
+apply plugin: "org.jetbrains.kotlin.kapt"
+
 
 android {
     compileSdkVersion 29
@@ -32,7 +34,21 @@ android {
         jvmTarget = "1.8"
     }
 
-    dataBinding.enabled = true
+    //kotlin DSL
+    configurations.all {
+        resolutionStrategy {
+            force("org.antlr:antlr4-runtime:4.7.1")
+            force("org.antlr:antlr4-tool:4.7.1")
+        }
+    }
+
+    buildFeatures {
+
+        dataBinding = true
+
+        // for view binding:
+        // viewBinding = true
+    }
 }
 
 def lifeCycleExtension = '1.1.1'
