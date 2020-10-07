@@ -5,11 +5,24 @@
         <variable
             name="dog"
             type="com.example.dogsappkotlin.model.DogBreed" />
+        
+        <variable
+            name="listener"
+            type="com.example.dogsappkotlin.view.DogClickListener" />
     </data>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="125dp"
+        android:onClick="@{listener::onDogClicked}"
         android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:id="@+id/dogId"
+            android:text="@{String.valueOf(dog.uuid)}"
+            />
 
         <ImageView
             android:layout_width="0dp"
