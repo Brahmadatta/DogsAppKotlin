@@ -1,5 +1,7 @@
 package com.example.dogsappkotlin.view
 
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -9,8 +11,13 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
+import androidx.palette.graphics.Palette
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import com.example.dogsappkotlin.R
 import com.example.dogsappkotlin.databinding.FragmentDetailBinding
+import com.example.dogsappkotlin.model.DogPalette
 import com.example.dogsappkotlin.util.getProgressDrawable
 import com.example.dogsappkotlin.util.loadImage
 import com.example.dogsappkotlin.viewmodel.DogDetailViewModel
@@ -55,7 +62,7 @@ class DetailFragment : Fragment() {
     private fun observeViewModel() {
 
         viewModel.dogLiveData.observe(viewLifecycleOwner, Observer { dog ->
-            dog?.let {
+            dog?.let { it ->
 //                dogName.text = dog.dogBreed
 //                dogPurpose.text = dog.bredFor
 //                dogTemperament.text = dog.temperament
@@ -64,7 +71,35 @@ class DetailFragment : Fragment() {
 //                    dogImage.loadImage(dog.imageUrl, getProgressDrawable(it))
 //                }
                 dataBinding.dogDetail = dog
+
+                it.imageUrl?.let {
+                    setUpBackgroundColor(it)
+                }
             }
         })
+    }
+
+    fun setUpBackgroundColor(url : String)
+    {
+
+        Glide.with(this)
+            .asBitmap()
+            .load(url)
+            .into(object : CustomTarget<Bitmap>(){
+                override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+                    Palette.from(resource)
+                        .generate {palette ->
+                            var intColor = palette?.vibrantSwatch?.rgb ?: 0
+                            var paletteColor = DogPalette(intColor)
+                            dataBinding.palette = paletteColor
+
+                        }
+                }
+
+                override fun onLoadCleared(placeholder: Drawable?) {
+
+                }
+
+            })
     }
 }
