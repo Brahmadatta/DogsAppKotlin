@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import com.example.dogsappkotlin.model.DogBreed
 import com.example.dogsappkotlin.model.DogDatabase
 import com.example.dogsappkotlin.model.DogsApiService
+import com.example.dogsappkotlin.notifications.NotificationHelper
 import com.example.dogsappkotlin.util.SharedPreferenceHelper
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -64,7 +65,7 @@ class DogViewModel(application: Application) : BaseViewModel(application) {
 
                     storeDogsLocally(list)
                     Toast.makeText(getApplication(),"Dogs Retrieved from endpoint",Toast.LENGTH_LONG).show()
-
+                    NotificationHelper(getApplication()).createNotification()
 
                 }
 
